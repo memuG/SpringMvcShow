@@ -1,4 +1,4 @@
-package com.przemo.conference.health;
+package com.przemo.conference.actuator;
 
 import org.springframework.boot.actuate.info.Info;
 import org.springframework.boot.actuate.info.InfoContributor;

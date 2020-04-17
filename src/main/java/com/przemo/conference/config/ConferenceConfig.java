@@ -14,7 +14,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
 
-@Configuration
+// @Configuration
 public class ConferenceConfig implements WebMvcConfigurer {
 
     @Autowired
