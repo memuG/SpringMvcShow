@@ -5,27 +5,30 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import javax.servlet.ServletContext;
+
 @Configuration
 public class ConferenceConfig implements WebMvcConfigurer {
 
     @Autowired
-    private ApplicationContext applicationContext;
+    ApplicationContext applicationContext;
 
     @Bean
+    @Description("Thymeleaf Template Resolver")
     public SpringResourceTemplateResolver templateResolver() {
-        SpringResourceTemplateResolver springResourceTemplateResolver = new SpringResourceTemplateResolver();
+        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        templateResolver.setPrefix("/static/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML5");
 
-        springResourceTemplateResolver.setPrefix("/WEB-INF/views/");
-        springResourceTemplateResolver.setSuffix(".html");
-        springResourceTemplateResolver.setTemplateMode("HTML5");
-        springResourceTemplateResolver.setApplicationContext(applicationContext);
-        return springResourceTemplateResolver;
+        return templateResolver;
     }
 
 //    @Bean
@@ -44,8 +47,7 @@ public class ConferenceConfig implements WebMvcConfigurer {
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
-        templateEngine.setEnableSpringELCompiler(true);
-//        templateEngine.setTemplateEngineMessageSource(messageSource());
+        templateEngine.setTemplateEngineMessageSource(messageSource());
         return templateEngine;
     }
 
@@ -56,5 +58,13 @@ public class ConferenceConfig implements WebMvcConfigurer {
         viewResolver.setTemplateEngine(templateEngine());
         viewResolver.setOrder(1);
         return viewResolver;
+    }
+
+    @Bean
+    @Description("Spring Message Resolver")
+    public ResourceBundleMessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("messages");
+        return messageSource;
     }
 }
